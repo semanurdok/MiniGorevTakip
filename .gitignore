@@ -1,0 +1,26 @@
+bin/
+obj/
+publish/
+.vs/
+*.user
+*.suo
+
+# Üretim ve gizli ayarlar
+appsettings.Production.json
+appsettings.*.json
+!.example.json
+.env
+.env.*
+
+# Sertifikalar ve özel anahtarlar
+*.pfx
+*.p12
+*.key
+
+# Veritabaný yedekleri
+*.bak
+*.mdf
+*.ldf
+
+# Yerel IDE dosyalarý
+.vscode/

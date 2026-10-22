@@ -1,0 +1,60 @@
+@model IEnumerable<TaskItem>
+@{
+    ViewData["Title"] = "Görevler";
+    var total = Model.Count();
+    var done = Model.Count(t => t.IsCompleted);
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0">Görevlerim</h1>
+    <span class="badge text-bg-secondary">@done / @total tamamlandı</span>
+</div>
+
+@if (total == 0)
+{
+    <div class="card card-body text-center text-muted">
+        Henüz görev yok. Sağ üstteki <strong>+ Yeni Görev</strong> düğmesiyle ekleyebilirsin.
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var task in Model)
+        {
+            <div class="col-12 col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h6 card-title @(task.IsCompleted ? "task-done" : "")">@task.Title</h2>
+
+                        @if (!string.IsNullOrWhiteSpace(task.Description))
+                        {
+                            <p class="card-text small @(task.IsCompleted ? "task-done" : "")">@task.Description</p>
+                        }
+
+                        <p class="card-text"><small class="text-muted">@task.CreatedAt.ToString("dd.MM.yyyy HH:mm")</small></p>
+                    </div>
+
+                    <div class="card-footer bg-white d-flex flex-wrap gap-2">
+                        <form asp-action="ToggleComplete" asp-route-id="@task.Id" method="post">
+                            @if (task.IsCompleted)
+                            {
+                                <button type="submit" class="btn btn-outline-secondary btn-sm">Geri al</button>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-success btn-sm">Tamamla</button>
+                            }
+                        </form>
+
+                        <a class="btn btn-outline-primary btn-sm" asp-action="Edit" asp-route-id="@task.Id">Düzenle</a>
+
+                        <form asp-action="Delete" asp-route-id="@task.Id" method="post"
+                              onsubmit="return confirm('Bu görev silinsin mi?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Sil</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
